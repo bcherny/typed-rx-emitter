@@ -1,4 +1,4 @@
-import { Observable, Subject } from 'rxjs'
+import { Observable, Subject } from 'rx-lite'
 
 interface State<Messages> {
   channels: Map<keyof Messages, Observable<any>>
@@ -15,7 +15,7 @@ export class Emitter<Messages> {
    */
   emit<T extends keyof Messages>(type: T, data: Messages[T]) {
     if (this.hasChannel(type)) {
-      this.getChannel(type)!.next(data)
+      this.getChannel(type)!.onNext(data)
     }
     return this
   }
