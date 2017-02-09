@@ -33,11 +33,6 @@ type Messages = {
 
 const emitter = new Emitter
 
-// Trigger an event
-// - Throws a compile time error unless id and value are set, and are of the right types
-// - Fails silently if no listeners have been assigned yet
-emitter.emit('OPEN_MODAL', true)
-
 // Listen on an event (basic)
 emitter
   .on('OPEN_MODAL')
@@ -49,6 +44,11 @@ emitter
   .filter(_ => _ > 3)
   .debounce()
   .subscribe(_ => console.log(`Counter incremented from ${_.previousValue} to ${_.value}!`))
+
+// Trigger an event
+// - Throws a compile time error unless id and value are set, and are of the right types
+// - Fails silently if no listeners have been assigned yet
+emitter.emit('OPEN_MODAL', true)
 ```
 
 ## Tests
