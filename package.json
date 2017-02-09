@@ -1,0 +1,50 @@
+{
+  "name": "typed-rx-emitter",
+  "version": "0.0.1",
+  "description": "Typesafe Rx-based emitter",
+  "main": "./index.js",
+  "typings": "./index.d.ts",
+  "scripts": {
+    "build": "rm *.d.ts; tsc",
+    "lint": "tslint src",
+    "watch": "tsc -w",
+    "tdd": "tsc -w & ava -w .",
+    "test": "npm run build; ava"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/bcherny/typed-rx-emitter.git"
+  },
+  "keywords": [
+    "react",
+    "reactive",
+    "event",
+    "message",
+    "redux",
+    "flux",
+    "cqrs",
+    "rx",
+    "rxjs",
+    "did",
+    "should",
+    "collection",
+    "model",
+    "better"
+  ],
+  "author": "Boris Cherny <boris@performancejs.com> (http://performancejs.com/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bcherny/typed-rx-emitter/issues"
+  },
+  "homepage": "https://github.com/bcherny/typed-rx-emitter#readme",
+  "devDependencies": {
+    "@types/node": "^7.0.5",
+    "ava": "^0.18.1",
+    "tslint": "^4.4.2",
+    "typescript": "^2.1.6"
+  },
+  "dependencies": {
+    "@types/rx": "^4.1.1",
+    "rxjs": "^5.1.0"
+  }
+}
