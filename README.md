@@ -9,8 +9,8 @@
 ## Highlights
 
 - 100% type-safe:
-  - Statically guarantees that emitters are called with the correct Action data given their Action name
-  - Statically guarantees that listeners are called with the correct Action data given their Action name
+  - Statically guarantees that emitters are called with the correct Message data given their Message name
+  - Statically guarantees that listeners are called with the correct Message data given their Message name
 - Supports all Rx methods on event listeners
 - Reuses observables across subscribers
 
@@ -25,8 +25,8 @@ npm install typed-rx-emitter --save
 ```ts
 import { Emitter } from 'typed-rx-emitter'
 
-// Enumerate actions
-type Actions = {
+// Enumerate messages
+type Messages = {
   INCREMENT_COUNTER: number
   OPEN_MODAL: boolean
 }
@@ -38,12 +38,12 @@ const emitter = new Emitter
 // - Fails silently if no listeners have been assigned yet
 emitter.emit('OPEN_MODAL', true)
 
-// Listen on an action (basic)
+// Listen on an event (basic)
 emitter
   .on('OPEN_MODAL')
   .subscribe(_ => console.log(`Change modal visibility: ${_}`))
 
-// Listen on an action (advanced)
+// Listen on an event (advanced)
 emitter
   .on('INCREMENT_COUNTER')
   .filter(_ => _ > 3)

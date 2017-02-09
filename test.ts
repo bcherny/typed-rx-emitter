@@ -1,12 +1,12 @@
 import test from 'ava'
 import { Emitter } from './'
 
-type Actions = {
+type Messages = {
   SHOULD_OPEN_MODAL: { id: number, value: boolean }
   SHOULD_CLOSE_MODAL: { id: number, value: boolean }
 }
 
-class App extends Emitter<Actions> { }
+class App extends Emitter<Messages> { }
 const app = new App()
 
 test('it should trigger subscribers', t => {

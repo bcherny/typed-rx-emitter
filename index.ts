@@ -1,19 +1,19 @@
 import { Observable, Subject } from 'rxjs'
 
-interface State<Actions> {
-  channels: Map<keyof Actions, Observable<any>>
+interface State<Messages> {
+  channels: Map<keyof Messages, Observable<any>>
 }
 
-export class Emitter<Actions> {
+export class Emitter<Messages> {
 
-  private emitterState: State<Actions> = {
+  private emitterState: State<Messages> = {
     channels: new Map
   }
 
   /**
-   * Emit an action (silently fails if no listeners are hooked up yet)
+   * Emit an event (silently fails if no listeners are hooked up yet)
    */
-  emit<T extends keyof Actions>(type: T, data: Actions[T]) {
+  emit<T extends keyof Messages>(type: T, data: Messages[T]) {
     if (this.hasChannel(type)) {
       this.getChannel(type)!.next(data)
     }
@@ -21,9 +21,9 @@ export class Emitter<Actions> {
   }
 
   /**
-   * Respond to an action
+   * Respond to an event
    */
-  on<T extends keyof Actions>(type: T) {
+  on<T extends keyof Messages>(type: T) {
     this.createChannel(type)
     return this.getChannel(type)!
   }
@@ -31,15 +31,15 @@ export class Emitter<Actions> {
 
   ///////////////////// privates /////////////////////
 
-  private createChannel<T extends keyof Actions>(type: T) {
-    this.emitterState.channels.set(type, new Subject<Actions[T]>())
+  private createChannel<T extends keyof Messages>(type: T) {
+    this.emitterState.channels.set(type, new Subject<Messages[T]>())
   }
 
-  private getChannel<T extends keyof Actions>(type: T) {
-    return this.emitterState.channels.get(type) as Subject<Actions[T]>
+  private getChannel<T extends keyof Messages>(type: T) {
+    return this.emitterState.channels.get(type) as Subject<Messages[T]>
   }
 
-  private hasChannel<T extends keyof Actions>(type: T): boolean {
+  private hasChannel<T extends keyof Messages>(type: T): boolean {
     return this.emitterState.channels.has(type)
   }
 }

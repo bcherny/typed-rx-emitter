@@ -1,6 +1,6 @@
 {
   "name": "typed-rx-emitter",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Typesafe Rx-based emitter",
   "main": "./index.js",
   "typings": "./index.d.ts",
@@ -8,8 +8,9 @@
     "build": "rm *.d.ts; tsc",
     "lint": "tslint src",
     "watch": "tsc -w",
+    "prepublish": "npm test",
     "tdd": "tsc -w & ava -w .",
-    "test": "npm run build; ava"
+    "test": "npm run build && ava"
   },
   "repository": {
     "type": "git",
