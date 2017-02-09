@@ -1,4 +1,4 @@
-import { Observable, Subject } from 'rx-lite'
+import { Observable, Subject } from 'rx'
 
 interface State<Messages> {
   channels: Map<keyof Messages, Observable<any>>
