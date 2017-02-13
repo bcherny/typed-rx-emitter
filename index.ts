@@ -24,7 +24,9 @@ export class Emitter<Messages> {
    * Respond to an event
    */
   on<T extends keyof Messages>(type: T) {
-    this.createChannel(type)
+    if (!this.hasChannel(type)) {
+      this.createChannel(type)
+    }
     return this.getChannel(type)!
   }
 

@@ -34,3 +34,11 @@ test('it should support Rx methods', t => {
   emitter.emit('SHOULD_OPEN_MODAL', { id: 99, value: true })
   emitter.emit('SHOULD_OPEN_MODAL', { id: 101, value: true })
 })
+
+test('it should support multiple listeners', t => {
+  t.plan(2)
+  const emitter = new Emitter<Messages>()
+  emitter.on('SHOULD_OPEN_MODAL').subscribe(_ => t.is(_.value, true))
+  emitter.on('SHOULD_OPEN_MODAL').subscribe(_ => t.is(_.value, true))
+  emitter.emit('SHOULD_OPEN_MODAL', { id: 123, value: true })
+})
