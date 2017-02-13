@@ -2,4 +2,3 @@
 circle.yml
 node_modules/
 test.*
-index.ts
