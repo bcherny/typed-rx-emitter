@@ -1,6 +1,6 @@
 {
   "name": "typed-rx-emitter",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "Typesafe Rx-based emitter",
   "main": "./index.js",
   "typings": "./index.d.ts",
@@ -39,7 +39,6 @@
   },
   "homepage": "https://github.com/bcherny/typed-rx-emitter#readme",
   "devDependencies": {
-    "@types/node": "^7.0.5",
     "ava": "^0.18.1",
     "tslint": "^4.4.2",
     "typescript": "^2.1.6"
