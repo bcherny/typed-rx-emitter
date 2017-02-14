@@ -31,7 +31,7 @@ type Messages = {
   OPEN_MODAL: boolean
 }
 
-const emitter = new Emitter
+const emitter = new Emitter<Messages>()
 
 // Listen on an event (basic)
 emitter
