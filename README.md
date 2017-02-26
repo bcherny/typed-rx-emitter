@@ -1,10 +1,10 @@
-# typed-rx-emitter [![Build Status][build]](https://circleci.com/gh/bcherny/typed-rx-emitter) [![npm]](https://www.npmjs.com/package/typed-rx-emitter) [![mit]](https://opensource.org/licenses/MIT)
+<img alt="typed-rx-emitter: Typesafe Rx-based event emitter" src="https://raw.githubusercontent.com/bcherny/typed-rx-emitter/master/logo.png" width="320px" />
+
+[![Build Status][build]](https://circleci.com/gh/bcherny/typed-rx-emitter) [![npm]](https://www.npmjs.com/package/typed-rx-emitter) [![mit]](https://opensource.org/licenses/MIT)
 
 [build]: https://img.shields.io/circleci/project/bcherny/typed-rx-emitter.svg?branch=master&style=flat-square
 [npm]: https://img.shields.io/npm/v/typed-rx-emitter.svg?style=flat-square
 [mit]: https://img.shields.io/npm/l/typed-rx-emitter.svg?style=flat-square
-
-> Typesafe Rx-based emitter
 
 ## Highlights
 
