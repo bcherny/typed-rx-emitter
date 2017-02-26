@@ -12,7 +12,6 @@
   - Statically guarantees that emitters are called with the correct Message data given their Message name
   - Statically guarantees that listeners are called with the correct Message data given their Message name
 - Supports all Rx methods on event listeners
-- Reuses observables across subscribers
 
 ## Installation
 

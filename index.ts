@@ -1,23 +1,23 @@
-import { Observable, Subject } from 'rx'
+import { Observable, Observer } from 'rx'
 
 interface State<Messages> {
-  channels: Map<keyof Messages, Observable<any>>,
-  listenerCounts: Map<keyof Messages, number>
+  observables: Map<keyof Messages, Observable<any>[]>
+  observers: Map<keyof Messages, Observer<any>[]>
 }
 
 export class Emitter<Messages> {
 
   private emitterState: State<Messages> = {
-    channels: new Map,
-    listenerCounts: new Map
+    observables: new Map,
+    observers: new Map
   }
 
   /**
    * Emit an event (silently fails if no listeners are hooked up yet)
    */
-  emit<T extends keyof Messages>(type: T, data: Messages[T]) {
+  emit<T extends keyof Messages>(type: T, data: Messages[T]): this {
     if (this.hasChannel(type)) {
-      this.getChannel(type)!.onNext(data)
+      this.emitterState.observers.get(type)!.forEach(_ => _.onNext(data))
     }
     return this
   }
@@ -25,47 +25,52 @@ export class Emitter<Messages> {
   /**
    * Respond to an event
    */
-  on<T extends keyof Messages>(type: T) {
-    if (!this.hasChannel(type)) {
-      this.createChannel(type)
-    }
-    const count = this.emitterState.listenerCounts.get(type)!
-    this.emitterState.listenerCounts.set(type, count + 1)
-    return this.getChannel(type)!
+  on<T extends keyof Messages>(type: T): Observable<Messages[T]> {
+    return this.createChannel(type)
+    // const subject = new Subject<Messages[T]>()
+    // subject.finally(() => this.deleteChannel(type, subject))
+    // this.getChannel(type).push(subject)
+    // return subject
   }
-
-  /**
-   * Stop listening and release resources
-   */
-  off<T extends keyof Messages>(type: T) {
-    if (this.hasChannel(type)) {
-      const count = this.emitterState.listenerCounts.get(type)!
-      if (count === 1) {
-        this.deleteChannel(type)
-      } else {
-        this.emitterState.listenerCounts.set(type, count - 1)
-      }
-    }
-  }
-
 
   ///////////////////// privates /////////////////////
 
   private createChannel<T extends keyof Messages>(type: T) {
-    this.emitterState.channels.set(type, new Subject<Messages[T]>())
-    this.emitterState.listenerCounts.set(type, 0)
+    if (!this.emitterState.observers.has(type)) {
+      this.emitterState.observers.set(type, [])
+    }
+    const observable: Observable<Messages[T]> = Observable.create<Messages[T]>(observer => {
+      this.emitterState.observers.get(type)!.push(observer)
+    })
+    .finally(() => this.deleteChannel(type, observable))
+    if (!this.emitterState.observables.has(type)) {
+      this.emitterState.observables.set(type, [])
+    }
+    this.emitterState.observables.get(type)!.push(observable)
+    return observable
   }
 
-  private deleteChannel<T extends keyof Messages>(type: T) {
-    this.emitterState.channels.delete(type)
-    this.emitterState.listenerCounts.delete(type)
+  private deleteChannel<T extends keyof Messages>(type: T, observable: Observable<Messages[T]>) {
+    if (!this.emitterState.observables.has(type)) {
+      return
+    }
+    const array = this.emitterState.observables.get(type)!
+    const index = array.indexOf(observable)
+    if (index < 0) {
+      return
+    }
+    array.splice(index, 1)
+    if (!array.length) {
+      this.emitterState.observables.delete(type)
+      this.emitterState.observers.delete(type)
+    }
   }
 
-  private getChannel<T extends keyof Messages>(type: T) {
-    return this.emitterState.channels.get(type) as Subject<Messages[T]>
-  }
+  // private getChannel<T extends keyof Messages>(type: T) {
+  //   return this.emitterState.observables.get(type) as Observable<Messages[T]>
+  // }
 
   private hasChannel<T extends keyof Messages>(type: T): boolean {
-    return this.emitterState.channels.has(type)
+    return this.emitterState.observables.has(type)
   }
 }

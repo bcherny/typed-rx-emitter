@@ -42,3 +42,22 @@ test('it should support multiple listeners', t => {
   emitter.on('SHOULD_OPEN_MODAL').subscribe(_ => t.is(_.value, true))
   emitter.emit('SHOULD_OPEN_MODAL', { id: 123, value: true })
 })
+
+test('it should dispose listeners independently', t => {
+  t.plan(1)
+  const emitter = new Emitter<Messages>()
+  const disposable1 = emitter.on('SHOULD_OPEN_MODAL').subscribe(_ => t.fail())
+  emitter.on('SHOULD_OPEN_MODAL').subscribe(_ => t.pass())
+  disposable1.dispose()
+  emitter.emit('SHOULD_OPEN_MODAL', { id: 123, value: true })
+})
+
+test('it should clean up unused listeners', t => {
+  t.plan(1)
+  const emitter = new Emitter<Messages>()
+  const disposable1 = emitter.on('SHOULD_OPEN_MODAL').subscribe(_ => t.fail())
+  const disposable2 = emitter.on('SHOULD_OPEN_MODAL').subscribe(_ => t.fail())
+  disposable1.dispose()
+  disposable2.dispose()
+  t.is(emitter['emitterState'].observables.has('SHOULD_OPEN_MODAL'), false)
+})
