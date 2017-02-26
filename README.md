@@ -43,7 +43,7 @@ emitter
   .on('INCREMENT_COUNTER')
   .filter(_ => _ > 3)
   .debounce()
-  .subscribe(_ => console.log(`Counter incremented from ${_.previousValue} to ${_.value}!`))
+  .subscribe(_ => console.log(`Counter incremented to ${_}!`))
 
 // Trigger an event
 // - Throws a compile time error unless id and value are set, and are of the right types

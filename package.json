@@ -44,6 +44,7 @@
     "typescript": "^2.2.1"
   },
   "dependencies": {
+    "@types/lodash": "^4.14.53",
     "@types/rx": "^4.1.1",
     "rx": "^4.1.0"
   }
