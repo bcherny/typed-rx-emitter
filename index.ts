@@ -23,14 +23,10 @@ export class Emitter<Messages> {
   }
 
   /**
-   * Respond to an event
+   * Subscribe to an event
    */
   on<T extends keyof Messages>(type: T): Observable<Messages[T]> {
     return this.createChannel(type)
-    // const subject = new Subject<Messages[T]>()
-    // subject.finally(() => this.deleteChannel(type, subject))
-    // this.getChannel(type).push(subject)
-    // return subject
   }
 
   ///////////////////// privates /////////////////////
@@ -39,10 +35,9 @@ export class Emitter<Messages> {
     if (!this.emitterState.observers.has(type)) {
       this.emitterState.observers.set(type, [])
     }
-    const observable: Observable<Messages[T]> = Observable.create<Messages[T]>(observer => {
-      this.emitterState.observers.get(type)!.push(observer)
-    })
-    .finally(() => this.deleteChannel(type, observable))
+    const observable: Observable<Messages[T]> = Observable
+      .create<Messages[T]>(_ => this.emitterState.observers.get(type)!.push(_))
+      .finally(() => this.deleteChannel(type, observable))
     if (!this.emitterState.observables.has(type)) {
       this.emitterState.observables.set(type, [])
     }
