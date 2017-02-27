@@ -1,0 +1,38 @@
+* { border: 0; margin: 0; outline: 0; padding: 0; }
+
+body {
+  font: 0 -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  padding: 50px;
+}
+
+body * {
+  font-size: 14px;
+  line-height: 22px;
+}
+
+button {
+  background: #008AFF;
+  box-shadow: 0 2px 2px 0 rgba(0,0,0,.1);
+  color: #fff;
+  font-size: 14px;
+  margin-right: 20px;
+  padding: 20px;
+  text-align: center;
+  width: 180px;
+  -webkit-appearance: none;
+}
+
+#counter, #log {
+  margin-top: 20px;
+  padding: 20px;
+  width: 340px;
+  }
+
+#counter {
+  background: #e5f3ff;
+}
+
+#log {
+  background: #eee;
+  font-family: "Fira Code", Menlo, "Courier New", "monospace";
+}

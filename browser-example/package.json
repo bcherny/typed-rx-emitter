@@ -1,0 +1,24 @@
+{
+  "name": "typed-rx-emitter-browser-example",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "browserify -p tsify -t [browserify-shim --global=true] -x rx src/index.ts -o dist/index.js",
+    "serve": "static -c 0 -z"
+  },
+  "browserify-shim": {
+    "rx": "global:Rx"
+  },
+  "author": "Boris Cherny <boris@performancejs.com> (http://performancejs.com/)",
+  "license": "MIT",
+  "devDependencies": {
+    "browserify": "^14.1.0",
+    "browserify-shim": "^3.8.13",
+    "tsify": "^3.0.1"
+  },
+  "dependencies": {
+    "node-static": "^0.7.9",
+    "typed-rx-emitter": "*"
+  }
+}

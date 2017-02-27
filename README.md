@@ -50,6 +50,8 @@ emitter
 emitter.emit('OPEN_MODAL', true)
 ```
 
+See a complete browser usage example [here](https://github.com/bcherny/typed-rx-emitter/blob/master/browser-example).
+
 ## Tests
 
 ```sh
