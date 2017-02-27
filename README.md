@@ -8,10 +8,12 @@
 
 ## Highlights
 
-- 100% type-safe:
-  - Statically guarantees that emitters are called with the correct Message data given their Message name
-  - Statically guarantees that listeners are called with the correct Message data given their Message name
-- Supports all Rx methods on event listeners
+- 100% typesafe:
+  - Statically enforces that channels in `.on()` are defined
+  - Statically enforces that channels in `.emit()` are defined
+  - Statically enforces that emitters are called with the correct data given their Message name
+  - Statically enforces that listeners are called with the correct data given their Message name
+- Supports [all RxJS methods](https://github.com/Reactive-Extensions/RxJS/blob/master/doc/libraries/main/rx.md)
 
 ## Installation
 
@@ -35,19 +37,20 @@ const emitter = new Emitter<Messages>()
 // Listen on an event (basic)
 emitter
   .on('OPEN_MODAL')
-  .subscribe(_ => console.log(`Change modal visibility: ${_}`))
+  .subscribe(_ => console.log(`Change modal visibility: ${_}`)) // _ is a boolean
 
 // Listen on an event (advanced)
 emitter
   .on('INCREMENT_COUNTER')
-  .filter(_ => _ > 3)
+  .filter(_ => _ > 3) // _ is a number
   .debounce()
-  .subscribe(_ => console.log(`Counter incremented to ${_}!`))
+  .subscribe(_ => console.log(`Counter incremented to ${_}!`)) // _ is a number
 
-// Trigger an event
-// - Throws a compile time error unless id and value are set, and are of the right types
-// - Fails silently if no listeners have been assigned yet
+// Trigger an event - throws a compile time error unless id and value are set, and are of the right types
 emitter.emit('OPEN_MODAL', true)
+
+// Event is misspelled - throws a compile time error
+emitter.emit('INCREMENT_CONTER')
 ```
 
 See a complete browser usage example [here](https://github.com/bcherny/typed-rx-emitter/blob/master/browser-example).
