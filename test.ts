@@ -52,12 +52,28 @@ test('it should dispose listeners independently', t => {
   emitter.emit('SHOULD_OPEN_MODAL', { id: 123, value: true })
 })
 
-test('it should clean up unused listeners', t => {
+test('it should automatically clean up unused listeners', t => {
   t.plan(1)
   const emitter = new Emitter<Messages>()
   const disposable1 = emitter.on('SHOULD_OPEN_MODAL').subscribe(_ => t.fail())
   const disposable2 = emitter.on('SHOULD_OPEN_MODAL').subscribe(_ => t.fail())
   disposable1.dispose()
   disposable2.dispose()
+  t.is(emitter['emitterState'].observables.has('SHOULD_OPEN_MODAL'), false)
+})
+
+test('it handle sequential additions and removals gracefully', t => {
+  t.plan(5)
+  const emitter = new Emitter<Messages>()
+  const disposable1 = emitter.on('SHOULD_OPEN_MODAL').subscribe(_ => t.fail())
+  const disposable2 = emitter.on('SHOULD_OPEN_MODAL').subscribe(_ => t.deepEqual(_, { id: 123, value: true }))
+  disposable1.dispose()
+  emitter.emit('SHOULD_OPEN_MODAL', { id: 123, value: true })
+  disposable2.dispose()
+  t.is(emitter['emitterState'].observables.has('SHOULD_OPEN_MODAL'), false)
+  const disposable3 = emitter.on('SHOULD_OPEN_MODAL').subscribe(_ => t.deepEqual(_, { id: 456, value: false }))
+  emitter.emit('SHOULD_OPEN_MODAL', { id: 456, value: false })
+  t.is(emitter['emitterState'].observables.has('SHOULD_OPEN_MODAL'), true)
+  disposable3.dispose()
   t.is(emitter['emitterState'].observables.has('SHOULD_OPEN_MODAL'), false)
 })
