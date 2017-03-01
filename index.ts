@@ -16,7 +16,7 @@ export class Emitter<Messages> {
    * Emit an event (silently fails if no listeners are hooked up yet)
    */
   emit<T extends keyof Messages>(type: T, data: Messages[T]): this {
-    if (this.has(type)) {
+    if (this.hasChannel(type)) {
       this.emitterState.observers.get(type)!.forEach(_ => _.onNext(data))
     }
     return this
@@ -26,12 +26,12 @@ export class Emitter<Messages> {
    * Subscribe to an event
    */
   on<T extends keyof Messages>(type: T): Observable<Messages[T]> {
-    return this.create(type)
+    return this.createChannel(type)
   }
 
   ///////////////////// privates /////////////////////
 
-  private create<T extends keyof Messages>(type: T) {
+  private createChannel<T extends keyof Messages>(type: T) {
     if (!this.emitterState.observers.has(type)) {
       this.emitterState.observers.set(type, [])
     }
@@ -40,12 +40,12 @@ export class Emitter<Messages> {
     }
     const observable: Observable<Messages[T]> = Observable
       .create<Messages[T]>(_ => this.emitterState.observers.get(type)!.push(_))
-      .finally(() => this.delete(type, observable))
+      .finally(() => this.deleteChannel(type, observable))
     this.emitterState.observables.get(type)!.push(observable)
     return observable
   }
 
-  private delete<T extends keyof Messages>(type: T, observable: Observable<Messages[T]>) {
+  private deleteChannel<T extends keyof Messages>(type: T, observable: Observable<Messages[T]>) {
     if (!this.emitterState.observables.has(type)) {
       return
     }
@@ -61,7 +61,7 @@ export class Emitter<Messages> {
     }
   }
 
-  private has<T extends keyof Messages>(type: T): boolean {
+  private hasChannel<T extends keyof Messages>(type: T): boolean {
     return this.emitterState.observables.has(type)
   }
 }
