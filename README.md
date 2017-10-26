@@ -48,7 +48,12 @@ emitter
   .on('INCREMENT_COUNTER')
   .filter(_ => _ > 3) // _ is a number
   .debounce()
-  .subscribe(_ => console.log(`Counter incremented to ${_}!`)) // _ is a number
+  .subscribe(_ => console.log(`Counter incremented to ${_}`)) // _ is a number
+
+// Listen on all events
+emitter
+  .all()
+  .subscribe(() => console.log('Something changed'))
 
 // Trigger an event - throws a compile time error unless id and value are set, and are of the right types
 emitter.emit('OPEN_MODAL', true)

@@ -78,3 +78,22 @@ test('it handle sequential additions and removals gracefully', t => {
   disposable3.dispose()
   t.is(emitter['emitterState'].observables.has('SHOULD_OPEN_MODAL'), false)
 })
+
+test('#all should fire', t => {
+  t.plan(4)
+  const emitter = new Emitter<Messages>()
+  emitter.all().subscribe(_ => t.is(_.value, true))
+  emitter.emit('SHOULD_OPEN_MODAL', { id: 123, value: true })
+  emitter.emit('SHOULD_OPEN_MODAL', { id: 123, value: true })
+  emitter.emit('SHOULD_CLOSE_MODAL', { id: 123, value: true })
+  emitter.emit('SHOULD_CLOSE_MODAL', { id: 123, value: true })
+})
+
+test('#all should fire after specific listeners', t => {
+  t.plan(1)
+  const emitter = new Emitter<Messages>()
+  let isFirstCalled = false
+  emitter.on('SHOULD_OPEN_MODAL').subscribe(() => isFirstCalled = true)
+  emitter.all().subscribe(_ => t.is(isFirstCalled, true))
+  emitter.emit('SHOULD_OPEN_MODAL', { id: 123, value: true })
+})

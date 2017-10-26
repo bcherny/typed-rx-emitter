@@ -1,8 +1,10 @@
 import { Observable, Observer } from 'rx'
 
+const ALL = '__ALL__'
+
 interface State<Messages> {
-  observables: Map<keyof Messages, Observable<any>[]>
-  observers: Map<keyof Messages, Observer<any>[]>
+  observables: Map<keyof Messages | typeof ALL, Observable<any>[]>
+  observers: Map<keyof Messages | typeof ALL, Observer<any>[]>
 }
 
 export class Emitter<Messages> {
@@ -19,6 +21,9 @@ export class Emitter<Messages> {
     if (this.hasChannel(type)) {
       this.emitterState.observers.get(type)!.forEach(_ => _.onNext(data))
     }
+    if (this.hasChannel(ALL)) {
+      this.emitterState.observers.get(ALL)!.forEach(_ => _.onNext(data))
+    }
     return this
   }
 
@@ -29,9 +34,16 @@ export class Emitter<Messages> {
     return this.createChannel(type)
   }
 
+  /**
+   * Subscribe to all events
+   */
+  all(): Observable<Messages[keyof Messages]> {
+    return this.createChannel(ALL)
+  }
+
   ///////////////////// privates /////////////////////
 
-  private createChannel<T extends keyof Messages>(type: T) {
+  private createChannel<T extends keyof Messages>(type: T | typeof ALL) {
     if (!this.emitterState.observers.has(type)) {
       this.emitterState.observers.set(type, [])
     }
@@ -45,7 +57,7 @@ export class Emitter<Messages> {
     return observable
   }
 
-  private deleteChannel<T extends keyof Messages>(type: T, observable: Observable<Messages[T]>) {
+  private deleteChannel<T extends keyof Messages>(type: T | typeof ALL, observable: Observable<Messages[T]>) {
     if (!this.emitterState.observables.has(type)) {
       return
     }
@@ -61,7 +73,7 @@ export class Emitter<Messages> {
     }
   }
 
-  private hasChannel<T extends keyof Messages>(type: T): boolean {
+  private hasChannel<T extends keyof Messages>(type: T | typeof ALL): boolean {
     return this.emitterState.observables.has(type)
   }
 }
