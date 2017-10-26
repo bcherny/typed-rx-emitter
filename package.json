@@ -8,7 +8,7 @@
     "build": "rm *.d.ts; tsc",
     "lint": "tslint src",
     "watch": "tsc -w",
-    "prepublish": "npm test",
+    "prepublishOnly": "npm test",
     "tdd": "tsc -w & ava -w test.js",
     "test": "npm run build && ava test.js"
   },
@@ -39,12 +39,12 @@
   },
   "homepage": "https://github.com/bcherny/typed-rx-emitter#readme",
   "devDependencies": {
-    "ava": "^0.18.2",
-    "tslint": "^4.4.2",
-    "typescript": "^2.2.1"
+    "ava": "^0.23.0",
+    "tslint": "^5.8.0",
+    "typescript": "^2.5.3"
   },
   "dependencies": {
-    "@types/lodash": "^4.14.53",
+    "@types/lodash": "^4.14.80",
     "@types/rx": "^4.1.1",
     "rx": "^4.1.0"
   }

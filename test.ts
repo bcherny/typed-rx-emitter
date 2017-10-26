@@ -17,6 +17,7 @@ test('it should trigger subscribers', t => {
 })
 
 test('it should fail silently if emitting before subscribers exist', t => {
+  t.plan(0)
   const emitter = new Emitter<Messages>()
   emitter.emit('SHOULD_OPEN_MODAL', { id: 123, value: true })
   emitter.on('SHOULD_OPEN_MODAL').subscribe(_ => t.fail('Should not get called'))

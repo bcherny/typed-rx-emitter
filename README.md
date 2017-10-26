@@ -18,6 +18,10 @@
 ## Installation
 
 ```sh
+# Using Yarn:
+yarn add typed-rx-emitter
+
+# Using NPM:
 npm install typed-rx-emitter --save
 ```
 
