@@ -2,4 +2,5 @@
 node_modules/
 *.d.ts
 *.js
+!test.flow.js
 *.map
