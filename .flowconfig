@@ -1,0 +1,6 @@
+[include]
+index.js.flow
+test.flow.js
+
+[ignore]
+.*/browser-example/.*

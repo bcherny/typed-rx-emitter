@@ -1,0 +1,16 @@
+import type { Observable } from 'rx';
+
+declare export class Emitter<Messages> {
+  /**
+   * Emit an event (silently fails if no listeners are hooked up yet)
+   */
+  emit<T: $Keys<Messages>>(type: T, data: $ElementType<Messages, T>): this;
+  /**
+   * Subscribe to an event
+   */
+  on<T: $Keys<Messages>>(type: T): Observable<$ElementType<Messages, T>>;
+  /**
+   * Subscribe to all events
+   */
+  all(): Observable<$Values<Messages>>;
+}
