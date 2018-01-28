@@ -39,12 +39,12 @@
   },
   "homepage": "https://github.com/bcherny/typed-rx-emitter#readme",
   "devDependencies": {
-    "ava": "^0.23.0",
-    "tslint": "^5.8.0",
-    "typescript": "^2.5.3"
+    "ava": "^0.25.0",
+    "tslint": "^5.9.1",
+    "typescript": "^2.6.2"
   },
   "dependencies": {
-    "@types/lodash": "^4.14.80",
+    "@types/lodash": "^4.14.97",
     "@types/rx": "^4.1.1",
     "rx": "^4.1.0"
   }
