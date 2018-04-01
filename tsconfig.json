@@ -14,8 +14,10 @@
     "noUnusedParameters": true,
     "preserveConstEnums": true,
     "outDir": ".",
+    "skipLibCheck": true,
     "sourceMap": true,
     "strictNullChecks": true,
+    "strict": true,
     "target": "es5"
   },
   "files": [

@@ -15,14 +15,24 @@
   - Statically enforces that listeners are called with the correct data given their Message name
 - Supports [all RxJS methods](https://github.com/Reactive-Extensions/RxJS/blob/master/doc/libraries/main/rx.md)
 
-## Installation
+## Installation (with RxJS v5.x - recommended)
 
 ```sh
 # Using Yarn:
-yarn add typed-rx-emitter
+yarn add typed-rx-emitter rxjs
 
 # Using NPM:
-npm install typed-rx-emitter --save
+npm install typed-rx-emitter rxjs --save
+```
+
+## Installation (with RxJS v4.x)
+
+```sh
+# Using Yarn:
+yarn add typed-rx-emitter@^0.3
+
+# Using NPM:
+npm install typed-rx-emitter@^0.3 --save
 ```
 
 ## Usage

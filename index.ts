@@ -1,4 +1,4 @@
-import { Observable, Observer } from 'rx'
+import { Observable, Observer } from 'rxjs'
 
 const ALL = '__ALL__'
 
@@ -19,10 +19,10 @@ export class Emitter<Messages> {
    */
   emit<T extends keyof Messages>(type: T, data: Messages[T]): this {
     if (this.hasChannel(type)) {
-      this.emitterState.observers.get(type)!.forEach(_ => _.onNext(data))
+      this.emitterState.observers.get(type)!.forEach(_ => _.next(data))
     }
     if (this.hasChannel(ALL)) {
-      this.emitterState.observers.get(ALL)!.forEach(_ => _.onNext(data))
+      this.emitterState.observers.get(ALL)!.forEach(_ => _.next(data))
     }
     return this
   }
@@ -51,7 +51,10 @@ export class Emitter<Messages> {
       this.emitterState.observables.set(type, [])
     }
     const observable: Observable<Messages[T]> = Observable
-      .create<Messages[T]>(_ => this.emitterState.observers.get(type)!.push(_))
+      .create((_: Observer<Messages[T]>) => {
+        this.emitterState.observers.get(type)!.push(_)
+        return _
+      })
       .finally(() => this.deleteChannel(type, observable))
     this.emitterState.observables.get(type)!.push(observable)
     return observable
