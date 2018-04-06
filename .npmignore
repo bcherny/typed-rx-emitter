@@ -3,3 +3,6 @@ circle.yml
 node_modules/
 test.*
 browser-example
+logo.png
+logo.sketch
+
