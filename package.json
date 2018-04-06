@@ -1,6 +1,6 @@
 {
   "name": "typed-rx-emitter",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Typesafe Rx-based emitter",
   "main": "./index.js",
   "typings": "./index.d.ts",
@@ -46,9 +46,7 @@
     "tslint": "^5.9.1",
     "typescript": "^2.8.1"
   },
-  "dependencies": {
-    "@types/lodash": "^4.14.106"
-  },
+  "dependencies": {},
   "peerDependencies": {
     "rxjs": ">=5.0.0"
   }
