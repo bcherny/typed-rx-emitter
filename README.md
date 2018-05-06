@@ -15,7 +15,7 @@
   - Statically enforces that listeners are called with the correct data given their Message name
 - Supports [all RxJS methods](https://github.com/Reactive-Extensions/RxJS/blob/master/doc/libraries/main/rx.md)
 
-## Installation (with RxJS v5.x - recommended)
+## Installation (with RxJS v5.x or v6.x - recommended)
 
 ```sh
 # Using Yarn:
@@ -54,10 +54,14 @@ emitter
   .subscribe(_ => console.log(`Change modal visibility: ${_}`)) // _ is a boolean
 
 // Listen on an event (advanced)
+import { debounceTime, filter } from 'rxjs/operators'
+
 emitter
   .on('INCREMENT_COUNTER')
-  .filter(_ => _ > 3) // _ is a number
-  .debounce()
+  .pipe(
+    filter(_ => _ > 3), // _ is a number
+    debounceTime(100)
+  )
   .subscribe(_ => console.log(`Counter incremented to ${_}`)) // _ is a number
 
 // Listen on all events

@@ -10,7 +10,7 @@
     "watch": "tsc -w",
     "prepublishOnly": "npm test",
     "tdd": "tsc -w & ava -w test.js",
-    "test": "npm run build && ava test.js && flow check test.flow.js"
+    "test": "npm run build && ava test.js && flow check"
   },
   "repository": {
     "type": "git",
@@ -40,11 +40,11 @@
   "homepage": "https://github.com/bcherny/typed-rx-emitter#readme",
   "devDependencies": {
     "ava": "^0.25.0",
-    "flow-bin": "^0.69.0",
-    "rxjs": "^5.5.8",
+    "flow-bin": "^0.71.0",
+    "rxjs": "^6.1.0",
     "shx": "^0.2.2",
-    "tslint": "^5.9.1",
-    "typescript": "^2.8.1"
+    "tslint": "^5.10.0",
+    "typescript": "^2.8.3"
   },
   "dependencies": {},
   "peerDependencies": {

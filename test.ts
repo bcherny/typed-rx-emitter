@@ -1,5 +1,6 @@
 import test from 'ava'
 import { Emitter } from './'
+import { filter, map } from 'rxjs/operators'
 
 type Messages = {
   SHOULD_OPEN_MODAL: { id: number, value: boolean }
@@ -24,14 +25,16 @@ test('it should fail silently if emitting before subscribers exist', t => {
 })
 
 test('it should support Rx methods', t => {
-  t.plan(2)
+  t.plan(1)
   const emitter = new Emitter<Messages>()
   emitter.on('SHOULD_OPEN_MODAL')
-    .filter(_ => _.id > 100)
-    .subscribe(_ => {
-      t.is(_.id, 101)
-      t.is(_.value, true)
-    })
+    .pipe(
+      filter(_ => _.id > 100),
+      map(_ => _.id * 2)
+    )
+    .subscribe(_ =>
+      t.is(_, 202)
+    )
   emitter.emit('SHOULD_OPEN_MODAL', { id: 99, value: true })
   emitter.emit('SHOULD_OPEN_MODAL', { id: 101, value: true })
 })

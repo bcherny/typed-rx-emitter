@@ -1,4 +1,6 @@
-import type { Observable } from 'rx';
+// @flow strict-local
+
+import type { Observable } from 'rxjs';
 
 declare export class Emitter<Messages> {
   /**

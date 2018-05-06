@@ -53,9 +53,8 @@ export class Emitter<Messages> {
     const observable: Observable<Messages[T]> = Observable
       .create((_: Observer<Messages[T]>) => {
         this.emitterState.observers.get(type)!.push(_)
-        return _
+        return () => this.deleteChannel(type, observable)
       })
-      .finally(() => this.deleteChannel(type, observable))
     this.emitterState.observables.get(type)!.push(observable)
     return observable
   }
