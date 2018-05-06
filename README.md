@@ -1,10 +1,13 @@
 <img alt="typed-rx-emitter: Typesafe Rx-based event emitter" src="https://raw.githubusercontent.com/bcherny/typed-rx-emitter/master/logo.png" width="320px" />
 
-[![Build Status][build]](https://circleci.com/gh/bcherny/typed-rx-emitter) [![npm]](https://www.npmjs.com/package/typed-rx-emitter) [![mit]](https://opensource.org/licenses/MIT)
+[![Build Status][build]](https://circleci.com/gh/bcherny/typed-rx-emitter) [![npm]](https://www.npmjs.com/package/typed-rx-emitter) [![mit]](https://opensource.org/licenses/MIT) [![ts]](https://www.typescriptlang.org/) [![flow]](https://flow.org/)
 
 [build]: https://img.shields.io/circleci/project/bcherny/typed-rx-emitter.svg?branch=master&style=flat-square
 [npm]: https://img.shields.io/npm/v/typed-rx-emitter.svg?style=flat-square
 [mit]: https://img.shields.io/npm/l/typed-rx-emitter.svg?style=flat-square
+[ts]: https://img.shields.io/badge/TypeScript-%E2%9C%93-007ACC.svg?style=flat-square
+[flow]: https://img.shields.io/badge/Flow-%E2%9C%93-007ACC.svg?style=flat-square
+
 
 ## Highlights
 
@@ -13,7 +16,8 @@
   - Statically enforces that channels in `.emit()` are defined
   - Statically enforces that emitters are called with the correct data given their Message name
   - Statically enforces that listeners are called with the correct data given their Message name
-- Supports [all RxJS methods](https://github.com/Reactive-Extensions/RxJS/blob/master/doc/libraries/main/rx.md)
+- Supports [all RxJS methods](http://reactivex.io/rxjs/class/es6/Observable.js~Observable.html)
+- Supports RxJS versions 4, 5, and 6
 
 ## Installation (with RxJS v5.x or v6.x - recommended)
 
