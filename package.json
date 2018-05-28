@@ -40,8 +40,8 @@
   "homepage": "https://github.com/bcherny/typed-rx-emitter#readme",
   "devDependencies": {
     "ava": "^0.25.0",
-    "flow-bin": "^0.71.0",
-    "rxjs": "^6.1.0",
+    "flow-bin": "^0.73.0",
+    "rxjs": "^6.2.0",
     "shx": "^0.2.2",
     "tslint": "^5.10.0",
     "typescript": "^2.8.3"
