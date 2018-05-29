@@ -18,6 +18,7 @@
   - Statically enforces that listeners are called with the correct data given their Message name
 - Supports [all RxJS methods](http://reactivex.io/rxjs/class/es6/Observable.js~Observable.html)
 - Supports RxJS versions 4, 5, and 6
+- Preforms dynamic analysis to detect and warn about cycles in emitters
 
 ## Installation (with RxJS v5.x or v6.x - recommended)
 
@@ -81,6 +82,15 @@ emitter.emit('INCREMENT_CONTER')
 ```
 
 See a complete browser usage example [here](https://github.com/bcherny/typed-rx-emitter/blob/master/browser-example).
+
+## Options
+
+`Emitter` takes an optional `options` argument. `options` is an object, and each key in the object is optional:
+
+| Option | Default | Description |
+|-|-|-|
+| `Error` | `CyclicalDependencyError` | Custom Error subclass for cycle warning |
+| `isDevMode` | `false` | Perform dynamic analysis to warn about cycles? |
 
 ## Tests
 

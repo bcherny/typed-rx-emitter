@@ -5,12 +5,12 @@
   "main": "./index.js",
   "typings": "./index.d.ts",
   "scripts": {
-    "build": "shx rm -f index.d.ts test.d.ts && npm run lint && tsc",
+    "build": "shx rm -f index.d.ts test.d.ts && npm run lint && tsc -d",
     "lint": "tslint -p tsconfig.json ./*.ts",
     "watch": "tsc -w",
     "prepublishOnly": "npm test",
     "tdd": "tsc -w & ava -w test.js",
-    "test": "npm run build && ava test.js && flow check"
+    "test": "npm run build && ava -v test.js && flow check"
   },
   "repository": {
     "type": "git",

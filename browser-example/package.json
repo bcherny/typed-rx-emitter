@@ -13,12 +13,12 @@
   "author": "Boris Cherny <boris@performancejs.com> (http://performancejs.com/)",
   "license": "MIT",
   "devDependencies": {
-    "browserify": "^14.1.0",
-    "browserify-shim": "^3.8.13",
-    "tsify": "^3.0.1"
+    "browserify": "^16.2.2",
+    "browserify-shim": "^3.8.14",
+    "tsify": "^4.0.0"
   },
   "dependencies": {
-    "node-static": "^0.7.9",
+    "node-static": "^0.7.10",
     "typed-rx-emitter": "*"
   }
 }

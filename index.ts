@@ -1,81 +1,127 @@
-import { Observable, Observer } from 'rxjs'
+import * as RxJS from 'rxjs'
 
-const ALL = '__ALL__'
+export type ALL = '__ALL__'
+const ALL: ALL = '__ALL__'
 
-interface State<Messages> {
-  observables: Map<keyof Messages | typeof ALL, Observable<any>[]>
-  observers: Map<keyof Messages | typeof ALL, Observer<any>[]>
+interface State<Messages extends object> {
+  callChain: Set<keyof Messages | ALL>
+  observables: Map<keyof Messages | ALL, RxJS.Observable<any>[]>
+  observers: Map<keyof Messages | ALL, RxJS.Observer<any>[]>
+  options: Options<Messages>
 }
 
-export class Emitter<Messages> {
+export type Options<Messages> = {
+  onCycle(chain: (keyof Messages | ALL)[]): void
+  isDevMode: boolean
+}
 
-  private emitterState: State<Messages> = {
-    observables: new Map,
-    observers: new Map
+export class Emitter<Messages extends object> {
+
+  private emitterState: State<Messages>
+
+  constructor(options?: Partial<Options<Messages>>) {
+
+    let DEFAULT_OPTIONS: Options<Messages> = {
+      isDevMode: false,
+      onCycle(chain) {
+        console.error(
+          '[typed-rx-emitter] Error: Cyclical dependency detected. '
+          + 'This may cause a stack overflow unless you fix it. '
+          + chain.join(' -> ')
+        )
+      }
+    }
+
+    this.emitterState = {
+      callChain: new Set,
+      observables: new Map,
+      observers: new Map,
+      options: {...DEFAULT_OPTIONS, ...options}
+    }
   }
 
   /**
    * Emit an event (silently fails if no listeners are hooked up yet)
    */
-  emit<T extends keyof Messages>(type: T, data: Messages[T]): this {
-    if (this.hasChannel(type)) {
-      this.emitterState.observers.get(type)!.forEach(_ => _.next(data))
+  emit<K extends keyof Messages>(key: K, value: Messages[K]): this {
+    let { isDevMode, onCycle } = this.emitterState.options
+    if (isDevMode) {
+      if (this.emitterState.callChain.has(key)) {
+        onCycle(Array.from(this.emitterState.callChain).concat(key))
+        return this
+      } else {
+        this.emitterState.callChain.add(key)
+      }
+    }
+    if (this.hasChannel(key)) {
+      this.emitOnChannel(key, value)
     }
     if (this.hasChannel(ALL)) {
-      this.emitterState.observers.get(ALL)!.forEach(_ => _.next(data))
+      this.emitOnChannel(ALL, value)
     }
+    if (isDevMode) this.emitterState.callChain.clear()
     return this
   }
 
   /**
    * Subscribe to an event
    */
-  on<T extends keyof Messages>(type: T): Observable<Messages[T]> {
-    return this.createChannel(type)
+  on<K extends keyof Messages>(key: K): RxJS.Observable<Messages[K]> {
+    return this.createChannel(key)
   }
 
   /**
    * Subscribe to all events
    */
-  all(): Observable<Messages[keyof Messages]> {
+  all(): RxJS.Observable<Messages[keyof Messages]> {
     return this.createChannel(ALL)
   }
 
   ///////////////////// privates /////////////////////
 
-  private createChannel<T extends keyof Messages>(type: T | typeof ALL) {
-    if (!this.emitterState.observers.has(type)) {
-      this.emitterState.observers.set(type, [])
+  private createChannel<K extends keyof Messages>(key: K | ALL) {
+    if (!this.emitterState.observers.has(key)) {
+      this.emitterState.observers.set(key, [])
     }
-    if (!this.emitterState.observables.has(type)) {
-      this.emitterState.observables.set(type, [])
+    if (!this.emitterState.observables.has(key)) {
+      this.emitterState.observables.set(key, [])
     }
-    const observable: Observable<Messages[T]> = Observable
-      .create((_: Observer<Messages[T]>) => {
-        this.emitterState.observers.get(type)!.push(_)
-        return () => this.deleteChannel(type, observable)
+    const observable: RxJS.Observable<Messages[K]> = RxJS.Observable
+      .create((_: RxJS.Observer<Messages[K]>) => {
+        this.emitterState.observers.get(key)!.push(_)
+        return () => this.deleteChannel(key, observable)
       })
-    this.emitterState.observables.get(type)!.push(observable)
+    this.emitterState.observables.get(key)!.push(observable)
     return observable
   }
 
-  private deleteChannel<T extends keyof Messages>(type: T | typeof ALL, observable: Observable<Messages[T]>) {
-    if (!this.emitterState.observables.has(type)) {
+  private deleteChannel<K extends keyof Messages>(
+    key: K | ALL,
+    observable: RxJS.Observable<Messages[K]>
+  ) {
+    if (!this.emitterState.observables.has(key)) {
       return
     }
-    const array = this.emitterState.observables.get(type)!
+    const array = this.emitterState.observables.get(key)!
     const index = array.indexOf(observable)
     if (index < 0) {
       return
     }
     array.splice(index, 1)
     if (!array.length) {
-      this.emitterState.observables.delete(type)
-      this.emitterState.observers.delete(type)
+      this.emitterState.observables.delete(key)
+      this.emitterState.observers.delete(key)
     }
   }
 
-  private hasChannel<T extends keyof Messages>(type: T | typeof ALL): boolean {
-    return this.emitterState.observables.has(type)
+  private emitOnChannel<K extends keyof Messages>(
+    key: K | ALL,
+    value: Messages[K]
+  ) {
+    this.emitterState.observers.get(key)!.forEach(_ => _.next(value))
+  }
+
+  private hasChannel<K extends keyof Messages>(key: K | ALL): boolean {
+    return this.emitterState.observables.has(key)
   }
 }
