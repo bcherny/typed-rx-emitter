@@ -1,12 +1,12 @@
-import * as RxJS from 'rxjs'
+import { Observable, Observer } from 'rxjs'
 
 export type ALL = '__ALL__'
 const ALL: ALL = '__ALL__'
 
 interface State<Messages extends object> {
   callChain: Set<keyof Messages | ALL>
-  observables: Map<keyof Messages | ALL, RxJS.Observable<any>[]>
-  observers: Map<keyof Messages | ALL, RxJS.Observer<any>[]>
+  observables: Map<keyof Messages | ALL, Observable<any>[]>
+  observers: Map<keyof Messages | ALL, Observer<any>[]>
   options: Options<Messages>
 }
 
@@ -66,14 +66,14 @@ export class Emitter<Messages extends object> {
   /**
    * Subscribe to an event
    */
-  on<K extends keyof Messages>(key: K): RxJS.Observable<Messages[K]> {
+  on<K extends keyof Messages>(key: K): Observable<Messages[K]> {
     return this.createChannel(key)
   }
 
   /**
    * Subscribe to all events
    */
-  all(): RxJS.Observable<Messages[keyof Messages]> {
+  all(): Observable<Messages[keyof Messages]> {
     return this.createChannel(ALL)
   }
 
@@ -86,8 +86,8 @@ export class Emitter<Messages extends object> {
     if (!this.emitterState.observables.has(key)) {
       this.emitterState.observables.set(key, [])
     }
-    const observable: RxJS.Observable<Messages[K]> = RxJS.Observable
-      .create((_: RxJS.Observer<Messages[K]>) => {
+    const observable: Observable<Messages[K]> = Observable
+      .create((_: Observer<Messages[K]>) => {
         this.emitterState.observers.get(key)!.push(_)
         return () => this.deleteChannel(key, observable)
       })
@@ -97,7 +97,7 @@ export class Emitter<Messages extends object> {
 
   private deleteChannel<K extends keyof Messages>(
     key: K | ALL,
-    observable: RxJS.Observable<Messages[K]>
+    observable: Observable<Messages[K]>
   ) {
     if (!this.emitterState.observables.has(key)) {
       return
