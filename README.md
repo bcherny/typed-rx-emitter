@@ -16,9 +16,10 @@
   - Statically enforces that channels in `.emit()` are defined
   - Statically enforces that emitters are called with the correct data given their Message name
   - Statically enforces that listeners are called with the correct data given their Message name
-- Supports [all RxJS methods](http://reactivex.io/rxjs/class/es6/Observable.js~Observable.html)
+- Supports [all RxJS Observable methods](http://reactivex.io/rxjs/class/es6/Observable.js~Observable.html)
 - Supports RxJS versions 4, 5, and 6
 - Preforms dynamic analysis to detect and warn about cycles in emitters
+- 3.7kb gzipped & minified (using RxJS6), including RxJS
 
 ## Installation (with RxJS v5.x or v6.x - recommended)
 

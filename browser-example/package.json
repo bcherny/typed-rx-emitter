@@ -4,11 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "browserify -p tsify -t [browserify-shim --global=true] -x rx src/index.ts -o dist/index.js",
+    "build": "browserify -p tsify -t [browserify-shim --global=true] -x rxjs src/index.ts -o dist/index.js",
     "serve": "static -c 0 -z"
   },
   "browserify-shim": {
-    "rx": "global:Rx"
+    "rxjs": "global:Rx"
   },
   "author": "Boris Cherny <boris@performancejs.com> (http://performancejs.com/)",
   "license": "MIT",

@@ -2,7 +2,7 @@
 circle.yml
 node_modules/
 test.*
+test-minify
 browser-example
 logo.png
 logo.sketch
-

@@ -12,16 +12,16 @@ updateView(counter)
 
 emitter
   .on('DECREMENT')
-  .subscribe(_ => {
-    log('Action: DECREMENT')
-    updateModel(counter - _)
+  .subscribe(n => {
+    log('Emit: DECREMENT')
+    updateModel(counter - n)
   })
 
 emitter
   .on('INCREMENT')
-  .subscribe(_ => {
+  .subscribe(n => {
     log('Emit: INCREMENT')
-    updateModel(counter + _)
+    updateModel(counter + n)
   })
 
 function log(message: string) {

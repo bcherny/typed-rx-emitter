@@ -2,6 +2,7 @@
 node_modules/
 *.d.ts
 *.js
+!test-minify/webpack.config.js
 !test.flow.js
 *.map
 yarn-error.log
