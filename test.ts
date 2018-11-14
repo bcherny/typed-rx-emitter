@@ -7,103 +7,103 @@ type Messages = {
   SHOULD_CLOSE_MODAL: { id: number, value: boolean }
 }
 
-test('it should trigger subscribers', t => {
+test('it should trigger subscribers', (t: any) => {
   t.plan(2)
   const emitter = new Emitter<Messages>()
-  emitter.on('SHOULD_OPEN_MODAL').subscribe(_ => {
+  emitter.on('SHOULD_OPEN_MODAL').subscribe((_: any) => {
     t.is(_.id, 123)
     t.is(_.value, true)
   })
   emitter.emit('SHOULD_OPEN_MODAL', { id: 123, value: true })
 })
 
-test('it should fail silently if emitting before subscribers exist', t => {
+test('it should fail silently if emitting before subscribers exist', (t: any) => {
   t.plan(0)
   const emitter = new Emitter<Messages>()
   emitter.emit('SHOULD_OPEN_MODAL', { id: 123, value: true })
-  emitter.on('SHOULD_OPEN_MODAL').subscribe(_ => t.fail('Should not get called'))
+  emitter.on('SHOULD_OPEN_MODAL').subscribe((_: any) => t.fail('Should not get called'))
 })
 
-test('it should support Rx methods', t => {
+test('it should support Rx methods', (t: any) => {
   t.plan(1)
   const emitter = new Emitter<Messages>()
   emitter.on('SHOULD_OPEN_MODAL')
     .pipe(
-      filter(_ => _.id > 100),
-      map(_ => _.id * 2)
+      filter((_: any) => _.id > 100),
+      map((_: any) => _.id * 2)
     )
-    .subscribe(_ =>
+    .subscribe((_: any) =>
       t.is(_, 202)
     )
   emitter.emit('SHOULD_OPEN_MODAL', { id: 99, value: true })
   emitter.emit('SHOULD_OPEN_MODAL', { id: 101, value: true })
 })
 
-test('it should support multiple listeners', t => {
+test('it should support multiple listeners', (t: any) => {
   t.plan(2)
   const emitter = new Emitter<Messages>()
-  emitter.on('SHOULD_OPEN_MODAL').subscribe(_ => t.is(_.value, true))
-  emitter.on('SHOULD_OPEN_MODAL').subscribe(_ => t.is(_.value, true))
+  emitter.on('SHOULD_OPEN_MODAL').subscribe((_: any) => t.is(_.value, true))
+  emitter.on('SHOULD_OPEN_MODAL').subscribe((_: any) => t.is(_.value, true))
   emitter.emit('SHOULD_OPEN_MODAL', { id: 123, value: true })
 })
 
-test('it should dispose listeners independently', t => {
+test('it should dispose listeners independently', (t: any) => {
   t.plan(1)
   const emitter = new Emitter<Messages>()
-  const disposable1 = emitter.on('SHOULD_OPEN_MODAL').subscribe(_ => t.fail())
-  emitter.on('SHOULD_OPEN_MODAL').subscribe(_ => t.pass())
+  const disposable1 = emitter.on('SHOULD_OPEN_MODAL').subscribe((_: any) => t.fail())
+  emitter.on('SHOULD_OPEN_MODAL').subscribe((_: any) => t.pass())
   disposable1.unsubscribe()
   emitter.emit('SHOULD_OPEN_MODAL', { id: 123, value: true })
 })
 
-test('it should automatically clean up unused listeners', t => {
+test('it should automatically clean up unused listeners', (t: any) => {
   t.plan(1)
   const emitter = new Emitter<Messages>()
-  const disposable1 = emitter.on('SHOULD_OPEN_MODAL').subscribe(_ => t.fail())
-  const disposable2 = emitter.on('SHOULD_OPEN_MODAL').subscribe(_ => t.fail())
+  const disposable1 = emitter.on('SHOULD_OPEN_MODAL').subscribe((_: any) => t.fail())
+  const disposable2 = emitter.on('SHOULD_OPEN_MODAL').subscribe((_: any) => t.fail())
   disposable1.unsubscribe()
   disposable2.unsubscribe()
   t.is(emitter['emitterState'].observables.has('SHOULD_OPEN_MODAL'), false)
 })
 
-test('it handle sequential additions and removals gracefully', t => {
+test('it handle sequential additions and removals gracefully', (t: any) => {
   t.plan(5)
   const emitter = new Emitter<Messages>()
-  const disposable1 = emitter.on('SHOULD_OPEN_MODAL').subscribe(_ => t.fail())
-  const disposable2 = emitter.on('SHOULD_OPEN_MODAL').subscribe(_ => t.deepEqual(_, { id: 123, value: true }))
+  const disposable1 = emitter.on('SHOULD_OPEN_MODAL').subscribe((_: any) => t.fail())
+  const disposable2 = emitter.on('SHOULD_OPEN_MODAL').subscribe((_: any) => t.deepEqual(_, { id: 123, value: true }))
   disposable1.unsubscribe()
   emitter.emit('SHOULD_OPEN_MODAL', { id: 123, value: true })
   disposable2.unsubscribe()
   t.is(emitter['emitterState'].observables.has('SHOULD_OPEN_MODAL'), false)
-  const disposable3 = emitter.on('SHOULD_OPEN_MODAL').subscribe(_ => t.deepEqual(_, { id: 456, value: false }))
+  const disposable3 = emitter.on('SHOULD_OPEN_MODAL').subscribe((_: any) => t.deepEqual(_, { id: 456, value: false }))
   emitter.emit('SHOULD_OPEN_MODAL', { id: 456, value: false })
   t.is(emitter['emitterState'].observables.has('SHOULD_OPEN_MODAL'), true)
   disposable3.unsubscribe()
   t.is(emitter['emitterState'].observables.has('SHOULD_OPEN_MODAL'), false)
 })
 
-test('#all should fire', t => {
+test('#all should fire', (t: any) => {
   t.plan(4)
   const emitter = new Emitter<Messages>()
-  emitter.all().subscribe(_ => t.is(_.value, true))
+  emitter.all().subscribe((_: any) => t.is(_.value, true))
   emitter.emit('SHOULD_OPEN_MODAL', { id: 123, value: true })
   emitter.emit('SHOULD_OPEN_MODAL', { id: 123, value: true })
   emitter.emit('SHOULD_CLOSE_MODAL', { id: 123, value: true })
   emitter.emit('SHOULD_CLOSE_MODAL', { id: 123, value: true })
 })
 
-test('#all should fire after specific listeners', t => {
+test('#all should fire after specific listeners', (t: any) => {
   t.plan(1)
   const emitter = new Emitter<Messages>()
   let isFirstCalled = false
   emitter.on('SHOULD_OPEN_MODAL').subscribe(() => isFirstCalled = true)
-  emitter.all().subscribe(_ => t.is(isFirstCalled, true))
+  emitter.all().subscribe((_: any) => t.is(isFirstCalled, true))
   emitter.emit('SHOULD_OPEN_MODAL', { id: 123, value: true })
 })
 
 // cycle detection tests
 
-test('it should show a console error when detecting cyclical dependencies in dev mode (1)', t => {
+test('it should show a console error when detecting cyclical dependencies in dev mode (1)', (t: any) => {
   t.plan(1)
   console.error = (e: string) =>
     t.regex(e, /Cyclical dependency detected/)
@@ -114,7 +114,7 @@ test('it should show a console error when detecting cyclical dependencies in dev
   emitter.emit('SHOULD_OPEN_MODAL', { id: 1, value: true })
 })
 
-test('it should show a console error when detecting cyclical dependencies in dev mode (2)', t => {
+test('it should show a console error when detecting cyclical dependencies in dev mode (2)', (t: any) => {
   t.plan(1)
   console.error = (e: string) =>
     t.regex(e, /Cyclical dependency detected/)
@@ -128,7 +128,7 @@ test('it should show a console error when detecting cyclical dependencies in dev
   emitter.emit('SHOULD_OPEN_MODAL', { id: 1, value: true })
 })
 
-test('it should show a console error when detecting cyclical dependencies in dev mode (3)', t => {
+test('it should show a console error when detecting cyclical dependencies in dev mode (3)', (t: any) => {
   t.plan(1)
   console.error = (e: string) =>
     t.regex(e, /Cyclical dependency detected/)
@@ -139,7 +139,7 @@ test('it should show a console error when detecting cyclical dependencies in dev
   emitter.emit('SHOULD_OPEN_MODAL', { id: 1, value: true })
 })
 
-test('it should show a console error when detecting cyclical dependencies in dev mode (4)', t => {
+test('it should show a console error when detecting cyclical dependencies in dev mode (4)', (t: any) => {
   t.plan(2)
   console.error = (e: string) =>
     t.regex(e, /Cyclical dependency detected/)
@@ -153,7 +153,7 @@ test('it should show a console error when detecting cyclical dependencies in dev
   emitter.emit('SHOULD_OPEN_MODAL', { id: 1, value: true })
 })
 
-test('it not should show a console error when not detecting cyclical dependencies in dev mode', t => {
+test('it not should show a console error when not detecting cyclical dependencies in dev mode', (t: any) => {
   console.error = t.fail
   const emitter = new Emitter<Messages>({isDevMode: true})
   emitter.on('SHOULD_CLOSE_MODAL').subscribe(() =>

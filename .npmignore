@@ -6,3 +6,8 @@ test-minify
 browser-example
 logo.png
 logo.sketch
+.circleci/
+tslint.json
+tsconfig.json
+*.ts
+!*.d.ts
